@@ -328,8 +328,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[300]!, style: BorderStyle.dashed),
+                        border: Border.all(color: Colors.grey[400]!, width: 2),
                         borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey[50],
                       ),
                       child: _receiptImage != null
                           ? Column(

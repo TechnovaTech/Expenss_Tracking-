@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -15,7 +18,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   String _selectedPaymentMethod = 'Cash';
   String _selectedPerson = 'Self';
   DateTime _selectedDate = DateTime.now();
-  String? _uploadedReceipt;
+  File? _uploadedImage;
+  String? _uploadedDocument;
+  final ImagePicker _picker = ImagePicker();
 
   final List<String> _categories = [
     'Food', 'Transport', 'Shopping', 'Medical', 'Entertainment', 
@@ -255,37 +260,97 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
             const SizedBox(height: 20),
 
-            // 7. Upload Receipt
+            // 7. Upload Files
             _buildSection(
-              'Upload Receipt',
-              GestureDetector(
-                onTap: _uploadReceipt,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[300]!, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey[50],
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        _uploadedReceipt != null ? Icons.check_circle : Icons.cloud_upload,
-                        size: 40,
-                        color: _uploadedReceipt != null ? Colors.green : Colors.grey[400],
+              'Upload Files',
+              Column(
+                children: [
+                  // Image Upload
+                  GestureDetector(
+                    onTap: _uploadImage,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey[400]!, width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey[50],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        _uploadedReceipt ?? 'Tap to upload receipt',
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: _uploadedReceipt != null ? Colors.green : Colors.grey[600],
-                        ),
-                      ),
-                    ],
+                      child: _uploadedImage != null
+                          ? Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    _uploadedImage!,
+                                    height: 100,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Image uploaded',
+                                  style: GoogleFonts.inter(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.camera_alt, color: Colors.grey),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Upload Image',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
                   ),
-                ),
+                  
+                  const SizedBox(height: 12),
+                  
+                  // Document Upload
+                  GestureDetector(
+                    onTap: _uploadDocument,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey[400]!, width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey[50],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            _uploadedDocument != null ? Icons.check_circle : Icons.description,
+                            color: _uploadedDocument != null ? Colors.green : Colors.grey,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              _uploadedDocument ?? 'Upload Document',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                color: _uploadedDocument != null ? Colors.green : Colors.grey[600],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -351,14 +416,36 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     );
   }
 
-  void _uploadReceipt() {
-    // Simulate file upload
-    setState(() {
-      _uploadedReceipt = 'receipt_${DateTime.now().millisecondsSinceEpoch}.jpg';
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Receipt uploaded successfully!')),
+  void _uploadImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _uploadedImage = File(image.path);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Image uploaded successfully!')),
+      );
+    }
+  }
+
+  void _uploadDocument() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'docx', 'txt'],
     );
+    
+    if (result != null) {
+      setState(() {
+        _uploadedDocument = result.files.single.name;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Document uploaded successfully!')),
+      );
+    }
+  }
+
+  void _uploadReceipt() {
+    // Legacy method - can be removed
   }
 
   void _saveExpense() {
