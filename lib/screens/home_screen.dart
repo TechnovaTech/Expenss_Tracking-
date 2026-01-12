@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             // Top Purple Section
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Color(0xFF6C63FF), Color(0xFF5A52D5)],
