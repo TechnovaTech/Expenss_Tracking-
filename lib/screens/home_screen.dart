@@ -14,294 +14,298 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
-        child: Column(
-          children: [
-            // Top Purple Section
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF6C63FF), Color(0xFF5A52D5)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Top Purple Section
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF6C63FF), Color(0xFF5A52D5)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
                 ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: Column(
-                children: [
-                  // Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Dashboard',
-                        style: GoogleFonts.inter(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.menu, color: Colors.white),
-                          const SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                            ),
-                            child: CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white.withOpacity(0.2),
-                              child: Icon(Icons.person, color: Colors.white, size: 20),
-                            ),
+                child: Column(
+                  children: [
+                    // Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Dashboard',
+                          style: GoogleFonts.inter(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // Date
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'November 2025',
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // Financial Stats
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        ),
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.trending_up, color: Colors.white, size: 16),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Income',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '₹75,000',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            const Icon(Icons.menu, color: Colors.white),
+                            const SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const ProfileScreen()),
                               ),
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Icon(Icons.trending_down, color: Colors.white, size: 16),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Expenses',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '₹32,200',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Icon(Icons.account_balance_wallet, color: Colors.white, size: 16),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Balance',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '₹42,800',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                              child: CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Colors.white.withOpacity(0.2),
+                                child: const Icon(Icons.person, color: Colors.white, size: 20),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 20),
-            
-            // Category Breakdown
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Category Breakdown',
-                        style: GoogleFonts.inter(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF1A1A1A),
-                        ),
-                      ),
-                      Text(
-                        'View All',
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: const Color(0xFF6C63FF),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  Row(
-                    children: [
-                      _buildCategoryCard('Medical', '₹2,450', Icons.local_hospital, const Color(0xFFE53E3E)),
-                      _buildCategoryCard('Personal', '₹3,200', Icons.person, const Color(0xFF3182CE)),
-                      _buildCategoryCard('Wife', '₹4,800', Icons.favorite, const Color(0xFFD53F8C)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 30),
-            
-            // Quick Actions
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Quick Actions',
-                    style: GoogleFonts.inter(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF1A1A1A),
+                      ],
                     ),
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildActionCard(
-                          'Add Expense',
-                          Icons.remove_circle_outline,
-                          const LinearGradient(
-                            colors: [Color(0xFFFF6B6B), Color(0xFFEE5A52)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
-                          ),
+                    
+                    const SizedBox(height: 20),
+                    
+                    // Date
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'November 2025',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          color: Colors.white.withOpacity(0.8),
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildActionCard(
-                          'Add Income',
-                          Icons.add_circle_outline,
-                          const LinearGradient(
-                            colors: [Color(0xFF51CF66), Color(0xFF40C057)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AddIncomeScreen()),
+                    ),
+                    
+                    const SizedBox(height: 20),
+                    
+                    // Financial Stats
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.trending_up, color: Colors.white, size: 16),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Income',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      color: Colors.white.withOpacity(0.8),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '₹75,000',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  const Icon(Icons.trending_down, color: Colors.white, size: 16),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Expenses',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      color: Colors.white.withOpacity(0.8),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '₹32,200',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  const Icon(Icons.account_balance_wallet, color: Colors.white, size: 16),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Balance',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      color: Colors.white.withOpacity(0.8),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '₹42,800',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildActionCard(
-                          'History',
-                          Icons.history,
-                          const LinearGradient(
-                            colors: [Color(0xFF339AF0), Color(0xFF228BE6)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HistoryScreen()),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildActionCard(
-                          'Reports',
-                          Icons.bar_chart_rounded,
-                          const LinearGradient(
-                            colors: [Color(0xFF9775FA), Color(0xFF845EF7)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const ReportsScreen()),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              
+              const SizedBox(height: 20),
+              
+              // Category Breakdown
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Category Breakdown',
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF1A1A1A),
+                          ),
+                        ),
+                        Text(
+                          'View All',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            color: const Color(0xFF6C63FF),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    Row(
+                      children: [
+                        _buildCategoryCard('Medical', '₹2,450', Icons.local_hospital, const Color(0xFFE53E3E)),
+                        _buildCategoryCard('Personal', '₹3,200', Icons.person, const Color(0xFF3182CE)),
+                        _buildCategoryCard('Wife', '₹4,800', Icons.favorite, const Color(0xFFD53F8C)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 30),
+              
+              // Quick Actions
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Quick Actions',
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildActionCard(
+                            'Add Expense',
+                            Icons.remove_circle_outline,
+                            const LinearGradient(
+                              colors: [Color(0xFFFF6B6B), Color(0xFFEE5A52)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildActionCard(
+                            'Add Income',
+                            Icons.add_circle_outline,
+                            const LinearGradient(
+                              colors: [Color(0xFF51CF66), Color(0xFF40C057)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AddIncomeScreen()),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildActionCard(
+                            'History',
+                            Icons.history,
+                            const LinearGradient(
+                              colors: [Color(0xFF339AF0), Color(0xFF228BE6)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HistoryScreen()),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildActionCard(
+                            'Reports',
+                            Icons.bar_chart_rounded,
+                            const LinearGradient(
+                              colors: [Color(0xFF9775FA), Color(0xFF845EF7)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ReportsScreen()),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
