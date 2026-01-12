@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,6 +19,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _currency = 'USD';
   bool _notifications = true;
   bool _darkMode = false;
+  File? _profileImage;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -63,28 +67,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       CircleAvatar(
                         radius: 50,
                         backgroundColor: const Color(0xFF6C63FF),
-                        child: Text(
-                          'JD',
-                          style: GoogleFonts.inter(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
+                        backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                        child: _profileImage == null
+                            ? Text(
+                                'JD',
+                                style: GoogleFonts.inter(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : null,
                       ),
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF6C63FF),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                            size: 16,
+                        child: GestureDetector(
+                          onTap: _pickProfileImage,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF6C63FF),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 16,
+                            ),
                           ),
                         ),
                       ),
@@ -286,23 +296,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
             borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 2),
           ),
         ),
-        items: items.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
-        onChanged: (newValue) => setState(() => _currency = newValue!),
+        items: items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            setState(() {
+              _currency = newValue;
+            });
+          }
+        },
       ),
     );
   }
 
   Widget _buildSwitchTile(String title, bool value, Function(bool) onChanged) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
             style: GoogleFonts.inter(
-              fontSize: 14,
-              color: const Color(0xFF374151),
+              fontSize: 16,
+              color: const Color(0xFF1A1A1A),
             ),
           ),
           Switch(
@@ -315,13 +336,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildStatCard(String title, String value, Color color) {
+  Widget _buildStatCard(String title, String amount, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,7 +356,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 4),
           Text(
-            value,
+            amount,
             style: GoogleFonts.inter(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -350,7 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildActionTile(String title, IconData icon, VoidCallback onTap, {bool isDestructive = false}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         leading: Icon(
           icon,
@@ -359,27 +379,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Text(
           title,
           style: GoogleFonts.inter(
-            fontSize: 14,
-            color: isDestructive ? Colors.red : const Color(0xFF374151),
+            fontSize: 16,
+            color: isDestructive ? Colors.red : const Color(0xFF1A1A1A),
           ),
         ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         onTap: onTap,
-        contentPadding: EdgeInsets.zero,
       ),
     );
   }
 
+  void _pickProfileImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _profileImage = File(image.path);
+      });
+    }
+  }
+
   void _saveProfile() {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Profile updated successfully!',
-          style: GoogleFonts.inter(fontWeight: FontWeight.w500),
-        ),
+      const SnackBar(
+        content: Text('Profile updated successfully!'),
         backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'add_expense_screen.dart';
 import 'add_income_screen.dart';
 import 'history_screen.dart';
 import 'reports_screen.dart';
+import 'category_view_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -183,12 +184,18 @@ class HomeScreen extends StatelessWidget {
                             color: const Color(0xFF1A1A1A),
                           ),
                         ),
-                        Text(
-                          'View All',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            color: const Color(0xFF6C63FF),
-                            fontWeight: FontWeight.w500,
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const CategoryViewScreen()),
+                          ),
+                          child: Text(
+                            'View All',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: const Color(0xFF6C63FF),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],
