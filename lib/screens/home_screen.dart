@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'profile_screen.dart';
+import 'add_expense_screen.dart';
+import 'add_income_screen.dart';
+import 'history_screen.dart';
+import 'reports_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -232,6 +236,10 @@ class HomeScreen extends StatelessWidget {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -243,6 +251,10 @@ class HomeScreen extends StatelessWidget {
                             colors: [Color(0xFF51CF66), Color(0xFF40C057)],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
+                          ),
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AddIncomeScreen()),
                           ),
                         ),
                       ),
@@ -262,6 +274,10 @@ class HomeScreen extends StatelessWidget {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HistoryScreen()),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -273,6 +289,10 @@ class HomeScreen extends StatelessWidget {
                             colors: [Color(0xFF9775FA), Color(0xFF845EF7)],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
+                          ),
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ReportsScreen()),
                           ),
                         ),
                       ),
@@ -337,7 +357,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
   
-  Widget _buildActionCard(String title, IconData icon, Gradient gradient) {
+  Widget _buildActionCard(String title, IconData icon, Gradient gradient, VoidCallback onTap) {
     return Container(
       height: 90,
       decoration: BoxDecoration(
@@ -355,7 +375,7 @@ class HomeScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () {},
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
