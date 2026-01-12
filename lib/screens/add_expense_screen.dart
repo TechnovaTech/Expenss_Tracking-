@@ -14,6 +14,8 @@ class AddExpenseScreen extends StatefulWidget {
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
+  final _amountFocusNode = FocusNode();
+  final _noteFocusNode = FocusNode();
   String _selectedCategory = 'Food';
   String _selectedPaymentMethod = 'Cash';
   String _selectedPerson = 'Self';
@@ -45,9 +47,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
+    return GestureDetector(
+      onTap: () {
+        // Unfocus all text fields when tapping outside
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey[50],
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
         title: Text(
           'Add Expense',
           style: GoogleFonts.inter(fontWeight: FontWeight.w600),
@@ -69,7 +77,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               'Amount',
               TextField(
                 controller: _amountController,
+                focusNode: _amountFocusNode,
                 keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) => FocusScope.of(context).requestFocus(_noteFocusNode),
                 style: GoogleFonts.inter(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -243,7 +254,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               'Note',
               TextField(
                 controller: _noteController,
+                focusNode: _noteFocusNode,
                 maxLines: 3,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => FocusScope.of(context).unfocus(),
                 decoration: InputDecoration(
                   hintText: 'Add a note about this expense...',
                   border: OutlineInputBorder(
@@ -467,6 +481,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   void dispose() {
     _amountController.dispose();
     _noteController.dispose();
+    _amountFocusNode.dispose();
+    _noteFocusNode.dispose();
     super.dispose();
   }
 }

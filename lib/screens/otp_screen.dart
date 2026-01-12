@@ -70,9 +70,15 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
     );
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return GestureDetector(
+      onTap: () {
+        // Keep focus on OTP field when tapping outside
+        FocusScope.of(context).requestFocus(_focusNode);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -160,7 +166,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   submittedPinTheme: submittedPinTheme,
                   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                   showCursor: true,
-                  onCompleted: _handleOtpSubmit,
+                  // Remove onCompleted to prevent auto navigation
                 ),
               ),
               
