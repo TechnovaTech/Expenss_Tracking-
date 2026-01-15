@@ -29,56 +29,57 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 60),
                   
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 120,
+                    height: 120,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(28),
+                      borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
                           color: Color(0xFF667EEA).withOpacity(0.4),
-                          blurRadius: 20,
-                          offset: Offset(0, 10),
+                          blurRadius: 30,
+                          offset: Offset(0, 15),
                         ),
                       ],
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.account_balance_wallet_rounded,
                       color: Colors.white,
-                      size: 50,
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 32),
-                  
-                  Text(
-                    'Welcome Back!',
-                    style: GoogleFonts.poppins(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF2D3748),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 8),
-                  
-                  Text(
-                    'Track your expenses smartly',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      color: const Color(0xFF718096),
+                      size: 60,
                     ),
                   ),
                   
                   const SizedBox(height: 40),
+                  
+                  Text(
+                    'Welcome Back!',
+                    style: GoogleFonts.poppins(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2D3748),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 12),
+                  
+                  Text(
+                    'Sign in to continue managing\nyour expenses',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: Color(0xFF718096),
+                      height: 1.5,
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 50),
                   
                   TextFormField(
                     controller: _emailController,
@@ -107,6 +108,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(color: Color(0xFF667EEA), width: 2),
                       ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(color: Color(0xFFFC8181)),
+                      ),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                     ),
                     validator: (value) {
@@ -118,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 30),
                   
                   SizedBox(
                     width: double.infinity,
@@ -153,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 30),
                   
                   Row(
                     children: [
@@ -172,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 30),
                   
                   SizedBox(
                     width: double.infinity,
@@ -197,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
                   
                   Center(
                     child: RichText(
@@ -256,7 +261,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleGoogleSignIn() async {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Google Sign In - Coming Soon')),
+      SnackBar(
+        content: Text('Google Sign In - Coming Soon'),
+        backgroundColor: Color(0xFF667EEA),
+      ),
     );
   }
 

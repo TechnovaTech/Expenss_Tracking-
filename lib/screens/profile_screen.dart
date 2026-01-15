@@ -13,10 +13,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _nameController = TextEditingController(text: 'John Doe');
   final _emailController = TextEditingController(text: 'john.doe@email.com');
-  final _phoneController = TextEditingController(text: '+1 234 567 8900');
-  final _budgetController = TextEditingController(text: '5000');
+  final _phoneController = TextEditingController(text: '+91 98765 43210');
+  final _budgetController = TextEditingController(text: '50000');
   
-  String _currency = 'USD';
+  String _currency = 'INR';
   bool _notifications = true;
   bool _darkMode = false;
   File? _profileImage;
@@ -25,217 +25,202 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: Text(
-          'Profile',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF1A1A1A),
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF6C63FF)),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // Profile Picture Section
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
+      backgroundColor: const Color(0xFFF8F9FA),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200,
+            pinned: true,
+            backgroundColor: Color(0xFF667EEA),
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: const Color(0xFF6C63FF),
-                        backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                        child: _profileImage == null
-                            ? Text(
-                                'JD',
-                                style: GoogleFonts.inter(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : null,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _pickProfileImage,
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF6C63FF),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 16,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 40),
+                    Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 4),
+                          ),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.white,
+                            backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                            child: _profileImage == null
+                                ? Text(
+                                    'JD',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF667EEA),
+                                    ),
+                                  )
+                                : null,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _pickProfileImage,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Color(0xFF667EEA),
+                                size: 20,
+                              ),
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'John Doe',
+                      style: GoogleFonts.poppins(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Premium Member',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  _buildSection(
+                    'Personal Information',
+                    [
+                      _buildTextField('Full Name', _nameController, Icons.person_outline),
+                      _buildTextField('Email', _emailController, Icons.email_outlined),
+                      _buildTextField('Phone', _phoneController, Icons.phone_outlined),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  _buildSection(
+                    'Financial Settings',
+                    [
+                      _buildTextField('Monthly Budget', _budgetController, Icons.account_balance_wallet_outlined, prefix: '₹'),
+                      _buildDropdown('Currency', _currency, ['INR', 'USD', 'EUR', 'GBP'], Icons.attach_money),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  _buildSection(
+                    'App Settings',
+                    [
+                      _buildSwitchTile('Push Notifications', _notifications, (value) {
+                        setState(() => _notifications = value);
+                      }),
+                      _buildSwitchTile('Dark Mode', _darkMode, (value) {
+                        setState(() => _darkMode = value);
+                      }),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  _buildSection(
+                    'Quick Stats',
+                    [
+                      Row(
+                        children: [
+                          Expanded(child: _buildStatCard('Income', '₹75,000', Color(0xFF27AE60))),
+                          SizedBox(width: 12),
+                          Expanded(child: _buildStatCard('Expenses', '₹32,200', Color(0xFFE74C3C))),
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(child: _buildStatCard('Savings', '₹42,800', Color(0xFF4ECDC4))),
+                          SizedBox(width: 12),
+                          Expanded(child: _buildStatCard('Budget Left', '₹7,200', Color(0xFFFF9F43))),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'John Doe',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF1A1A1A),
+                  SizedBox(height: 16),
+                  _buildSection(
+                    'Actions',
+                    [
+                      _buildActionTile('Export Data', Icons.download, () {}),
+                      _buildActionTile('Backup & Sync', Icons.cloud_upload, () {}),
+                      _buildActionTile('Help & Support', Icons.help_outline, () {}),
+                      _buildActionTile('Logout', Icons.logout, () {}, isDestructive: true),
+                    ],
+                  ),
+                  SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: _saveProfile,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF667EEA),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Text(
+                        'Save Changes',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                  Text(
-                    'Premium Member',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: const Color(0xFF6C63FF),
-                    ),
-                  ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            // Personal Information
-            _buildSection(
-              'Personal Information',
-              [
-                _buildTextField('Full Name', _nameController, Icons.person_outline),
-                _buildTextField('Email', _emailController, Icons.email_outlined),
-                _buildTextField('Phone', _phoneController, Icons.phone_outlined),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Financial Settings
-            _buildSection(
-              'Financial Settings',
-              [
-                _buildTextField('Monthly Budget', _budgetController, Icons.account_balance_wallet_outlined, prefix: '\$'),
-                _buildDropdown('Currency', _currency, ['USD', 'EUR', 'GBP', 'INR'], Icons.attach_money),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // App Settings
-            _buildSection(
-              'App Settings',
-              [
-                _buildSwitchTile('Push Notifications', _notifications, (value) {
-                  setState(() => _notifications = value);
-                }),
-                _buildSwitchTile('Dark Mode', _darkMode, (value) {
-                  setState(() => _darkMode = value);
-                }),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Quick Stats
-            _buildSection(
-              'Quick Stats',
-              [
-                Row(
-                  children: [
-                    Expanded(child: _buildStatCard('Total Income', '\$12,450', Colors.green)),
-                    const SizedBox(width: 12),
-                    Expanded(child: _buildStatCard('Total Expenses', '\$8,230', Colors.red)),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(child: _buildStatCard('Savings', '\$4,220', Colors.blue)),
-                    const SizedBox(width: 12),
-                    Expanded(child: _buildStatCard('Budget Left', '\$1,770', Colors.orange)),
-                  ],
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Action Buttons
-            _buildSection(
-              'Actions',
-              [
-                _buildActionTile('Export Data', Icons.download, () {}),
-                _buildActionTile('Backup & Sync', Icons.cloud_upload, () {}),
-                _buildActionTile('Help & Support', Icons.help_outline, () {}),
-                _buildActionTile('Logout', Icons.logout, () {}, isDestructive: true),
-              ],
-            ),
-
-            const SizedBox(height: 40),
-
-            // Save Button
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _saveProfile,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6C63FF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Save Changes',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildSection(String title, List<Widget> children) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -244,13 +229,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Text(
             title,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF1A1A1A),
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2D3748),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           ...children,
         ],
       ),
@@ -259,20 +244,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildTextField(String label, TextEditingController controller, IconData icon, {String? prefix}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: 16),
       child: TextFormField(
         controller: controller,
+        style: GoogleFonts.poppins(fontSize: 15),
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: Icon(icon, color: const Color(0xFF6C63FF)),
+          labelStyle: GoogleFonts.poppins(color: Color(0xFF718096)),
+          prefixIcon: Icon(icon, color: Color(0xFF667EEA)),
           prefixText: prefix,
+          filled: true,
+          fillColor: Color(0xFFF7FAFC),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Color(0xFFE2E8F0)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 2),
+            borderSide: BorderSide(color: Color(0xFF667EEA), width: 2),
           ),
         ),
       ),
@@ -281,32 +274,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildDropdown(String label, String value, List<String> items, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: 16),
       child: DropdownButtonFormField<String>(
         value: value,
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: Icon(icon, color: const Color(0xFF6C63FF)),
+          labelStyle: GoogleFonts.poppins(color: Color(0xFF718096)),
+          prefixIcon: Icon(icon, color: Color(0xFF667EEA)),
+          filled: true,
+          fillColor: Color(0xFFF7FAFC),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Color(0xFFE2E8F0)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 2),
+            borderSide: BorderSide(color: Color(0xFF667EEA), width: 2),
           ),
         ),
         items: items.map((String item) {
           return DropdownMenuItem<String>(
             value: item,
-            child: Text(item),
+            child: Text(item, style: GoogleFonts.poppins()),
           );
         }).toList(),
         onChanged: (String? newValue) {
           if (newValue != null) {
-            setState(() {
-              _currency = newValue;
-            });
+            setState(() => _currency = newValue);
           }
         },
       ),
@@ -315,21 +313,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildSwitchTile(String title, bool value, Function(bool) onChanged) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              color: const Color(0xFF1A1A1A),
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+              color: Color(0xFF2D3748),
             ),
           ),
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFF6C63FF),
+            activeColor: Color(0xFF667EEA),
           ),
         ],
       ),
@@ -338,27 +336,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildStatCard(String title, String amount, Color color) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.poppins(
               fontSize: 12,
               color: color,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 6),
           Text(
             amount,
-            style: GoogleFonts.inter(
-              fontSize: 16,
+            style: GoogleFonts.poppins(
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: color,
             ),
@@ -370,20 +368,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildActionTile(String title, IconData icon, VoidCallback onTap, {bool isDestructive = false}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 8),
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: isDestructive ? Colors.red : const Color(0xFF6C63FF),
+        contentPadding: EdgeInsets.zero,
+        leading: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: isDestructive ? Colors.red.withOpacity(0.1) : Color(0xFF667EEA).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            icon,
+            color: isDestructive ? Colors.red : Color(0xFF667EEA),
+            size: 22,
+          ),
         ),
         title: Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 16,
-            color: isDestructive ? Colors.red : const Color(0xFF1A1A1A),
+          style: GoogleFonts.poppins(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: isDestructive ? Colors.red : Color(0xFF2D3748),
           ),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xFF718096)),
         onTap: onTap,
       ),
     );
@@ -392,17 +400,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _pickProfileImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      setState(() {
-        _profileImage = File(image.path);
-      });
+      setState(() => _profileImage = File(image.path));
     }
   }
 
   void _saveProfile() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text('Profile updated successfully!'),
-        backgroundColor: Colors.green,
+        backgroundColor: Color(0xFF27AE60),
       ),
     );
   }

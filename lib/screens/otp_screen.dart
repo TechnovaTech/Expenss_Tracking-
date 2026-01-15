@@ -44,48 +44,44 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
-      textStyle: GoogleFonts.inter(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xFF1A1A1A),
+      width: 60,
+      height: 60,
+      textStyle: GoogleFonts.poppins(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Color(0xFF2D3748),
       ),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        borderRadius: BorderRadius.circular(12),
-        color: const Color(0xFFF9FAFB),
+        color: Color(0xFFF7FAFC),
+        border: Border.all(color: Color(0xFFE2E8F0), width: 2),
+        borderRadius: BorderRadius.circular(16),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: const Color(0xFF6C63FF), width: 2),
-      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: Color(0xFF667EEA), width: 2),
+      color: Colors.white,
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: const Color(0xFF6C63FF).withOpacity(0.1),
-        border: Border.all(color: const Color(0xFF6C63FF)),
+        color: Color(0xFF667EEA).withOpacity(0.1),
+        border: Border.all(color: Color(0xFF667EEA), width: 2),
       ),
     );
 
     return GestureDetector(
-      onTap: () {
-        // Keep focus on OTP field when tapping outside
-        FocusScope.of(context).requestFocus(_focusNode);
-      },
+      onTap: () => FocusScope.of(context).requestFocus(_focusNode),
       child: Scaffold(
         backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios,
-              color: Color(0xFF374151),
+              color: Color(0xFF2D3748),
             ),
           ),
         ),
@@ -93,167 +89,177 @@ class _OtpScreenState extends State<OtpScreen> {
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              
-              // Icon
-              Center(
-                child: Container(
-                  width: 80,
-                  height: 80,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                
+                Container(
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6C63FF).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xFF667EEA).withOpacity(0.3),
+                        blurRadius: 20,
+                        offset: Offset(0, 10),
+                      ),
+                    ],
                   ),
-                  child: const Icon(
-                    Icons.mail_outline,
-                    color: Color(0xFF6C63FF),
-                    size: 40,
+                  child: Icon(
+                    Icons.lock_outline_rounded,
+                    color: Colors.white,
+                    size: 50,
                   ),
                 ),
-              ),
-              
-              const SizedBox(height: 32),
-              
-              // Title
-              Center(
-                child: Text(
+                
+                const SizedBox(height: 40),
+                
+                Text(
                   'Verify Your Email',
-                  style: GoogleFonts.inter(
-                    fontSize: 28,
+                  style: GoogleFonts.poppins(
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1A1A1A),
+                    color: Color(0xFF2D3748),
                   ),
                 ),
-              ),
-              
-              const SizedBox(height: 12),
-              
-              // Subtitle
-              Center(
-                child: RichText(
+                
+                const SizedBox(height: 16),
+                
+                RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.poppins(
                       fontSize: 16,
-                      color: const Color(0xFF6B7280),
+                      color: Color(0xFF718096),
+                      height: 1.5,
                     ),
                     children: [
-                      const TextSpan(text: 'We sent a verification code to\n'),
+                      TextSpan(text: 'We sent a 6-digit code to\n'),
                       TextSpan(
                         text: widget.email,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF374151),
+                          color: Color(0xFF667EEA),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              
-              const SizedBox(height: 48),
-              
-              // OTP Input
-              Center(
-                child: Pinput(
-                  controller: _pinController,
-                  focusNode: _focusNode,
-                  length: 6,
-                  defaultPinTheme: defaultPinTheme,
-                  focusedPinTheme: focusedPinTheme,
-                  submittedPinTheme: submittedPinTheme,
-                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                  showCursor: true,
-                  // Remove onCompleted to prevent auto navigation
-                ),
-              ),
-              
-              const SizedBox(height: 32),
-              
-              // Verify Button
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : () => _handleOtpSubmit(_pinController.text),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6C63FF),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                
+                const SizedBox(height: 50),
+                
+                Center(
+                  child: Pinput(
+                    controller: _pinController,
+                    focusNode: _focusNode,
+                    length: 6,
+                    defaultPinTheme: defaultPinTheme,
+                    focusedPinTheme: focusedPinTheme,
+                    submittedPinTheme: submittedPinTheme,
+                    pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                    showCursor: true,
                   ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
+                ),
+                
+                const SizedBox(height: 40),
+                
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : () => _handleOtpSubmit(_pinController.text),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF667EEA),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : Text(
+                            'Verify Code',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                  ),
+                ),
+                
+                const SizedBox(height: 30),
+                
+                Center(
+                  child: _canResend
+                      ? TextButton(
+                          onPressed: _handleResendCode,
+                          child: Text(
+                            'Resend Code',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF667EEA),
+                            ),
                           ),
                         )
-                      : Text(
-                          'Verify Code',
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                      : RichText(
+                          text: TextSpan(
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              color: Color(0xFF718096),
+                            ),
+                            children: [
+                              TextSpan(text: 'Resend code in '),
+                              TextSpan(
+                                text: '${_resendTimer}s',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF667EEA),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                 ),
-              ),
-              
-              const SizedBox(height: 24),
-              
-              // Resend Code
-              Center(
-                child: _canResend
-                    ? TextButton(
-                        onPressed: _handleResendCode,
+                
+                const Spacer(),
+                
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF7FAFC),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Color(0xFF667EEA), size: 20),
+                      SizedBox(width: 12),
+                      Expanded(
                         child: Text(
-                          'Resend Code',
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF6C63FF),
+                          'Didn\'t receive the code? Check your spam folder',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            color: Color(0xFF718096),
                           ),
-                        ),
-                      )
-                    : RichText(
-                        text: TextSpan(
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            color: const Color(0xFF6B7280),
-                          ),
-                          children: [
-                            const TextSpan(text: 'Resend code in '),
-                            TextSpan(
-                              text: '${_resendTimer}s',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF6C63FF),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
-              ),
-              
-              const Spacer(),
-              
-              // Help Text
-              Center(
-                child: Text(
-                  'Didn\'t receive the code? Check your spam folder',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: const Color(0xFF6B7280),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
               ],
             ),
           ),
@@ -265,24 +271,26 @@ class _OtpScreenState extends State<OtpScreen> {
   void _handleOtpSubmit(String pin) async {
     if (pin.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter complete 6-digit code')),
+        SnackBar(
+          content: Text('Please enter complete 6-digit code'),
+          backgroundColor: Color(0xFFFC8181),
+        ),
       );
       return;
     }
 
     setState(() => _isLoading = true);
-    
-    // Simulate API call
     await Future.delayed(const Duration(seconds: 2));
-    
     setState(() => _isLoading = false);
     
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Successful!')),
+        SnackBar(
+          content: Text('Login Successful!'),
+          backgroundColor: Color(0xFF48BB78),
+        ),
       );
       
-      // Navigate to home screen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -298,7 +306,10 @@ class _OtpScreenState extends State<OtpScreen> {
     _startResendTimer();
     
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Verification code sent!')),
+      SnackBar(
+        content: Text('Verification code sent!'),
+        backgroundColor: Color(0xFF667EEA),
+      ),
     );
   }
 

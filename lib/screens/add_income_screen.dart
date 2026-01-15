@@ -14,464 +14,381 @@ class AddIncomeScreen extends StatefulWidget {
 class _AddIncomeScreenState extends State<AddIncomeScreen> {
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
-  final _amountFocusNode = FocusNode();
-  final _noteFocusNode = FocusNode();
   String _selectedCategory = 'Salary';
-  String _selectedPaymentMethod = 'Cash';
-  String _selectedPerson = 'Self';
+  String _selectedPaymentMethod = 'Online';
   DateTime _selectedDate = DateTime.now();
   File? _uploadedImage;
-  String? _uploadedDocument;
   final ImagePicker _picker = ImagePicker();
 
-  final List<String> _categories = [
-    'Salary', 'Freelance', 'Business', 'Investment', 'Bonus', 
-    'Gift', 'Rental', 'Other'
+  final List<Map<String, dynamic>> _categories = [
+    {'name': 'Salary', 'icon': Icons.work, 'color': Color(0xFF27AE60)},
+    {'name': 'Freelance', 'icon': Icons.laptop, 'color': Color(0xFF4ECDC4)},
+    {'name': 'Business', 'icon': Icons.business, 'color': Color(0xFF45B7D1)},
+    {'name': 'Investment', 'icon': Icons.trending_up, 'color': Color(0xFF96CEB4)},
+    {'name': 'Bonus', 'icon': Icons.card_giftcard, 'color': Color(0xFF9775FA)},
+    {'name': 'Other', 'icon': Icons.attach_money, 'color': Color(0xFFFF9F43)},
   ];
 
-  final List<String> _paymentMethods = ['Cash', 'Online', 'Credit Card'];
-  final List<String> _persons = ['Self', 'Child', 'Spouse'];
-
-  final Map<String, IconData> _categoryIcons = {
-    'Salary': Icons.work,
-    'Freelance': Icons.laptop,
-    'Business': Icons.business,
-    'Investment': Icons.trending_up,
-    'Bonus': Icons.card_giftcard,
-    'Gift': Icons.redeem,
-    'Rental': Icons.home,
-    'Other': Icons.attach_money,
-  };
+  final List<String> _paymentMethods = ['Cash', 'Online', 'Bank Transfer'];
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Unfocus all text fields when tapping outside
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.grey[50],
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          title: Text(
-            'Add Income',
-            style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF6C63FF)),
-          ),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Amount Input
-            _buildSection(
-              'Amount',
-              TextField(
-                controller: _amountController,
-                focusNode: _amountFocusNode,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                onSubmitted: (_) => FocusScope.of(context).requestFocus(_noteFocusNode),
-                style: GoogleFonts.inter(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF51CF66),
-                ),
-                decoration: InputDecoration(
-                  prefixText: '₹ ',
-                  prefixStyle: GoogleFonts.inter(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF51CF66),
-                  ),
-                  hintText: '0',
-                  border: InputBorder.none,
-                  hintStyle: GoogleFonts.inter(
-                    fontSize: 32,
-                    color: Colors.grey[400],
-                  ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+          SliverAppBar(
+            floating: false,
+            pinned: true,
+            backgroundColor: Color(0xFF27AE60),
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            ),
+            title: Text(
+              'Add Income',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF27AE60), Color(0xFF229954)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            // 2. Category Selection
-            _buildSection(
-              'Category',
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: _categories.map((category) {
-                  final isSelected = category == _selectedCategory;
-                  return GestureDetector(
-                    onTap: () => setState(() => _selectedCategory = category),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF51CF66) : Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _categoryIcons[category],
-                            size: 18,
-                            color: isSelected ? Colors.white : Colors.grey[600],
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Amount',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF718096),
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            category,
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: isSelected ? Colors.white : Colors.grey[600],
+                        ),
+                        TextField(
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          style: GoogleFonts.poppins(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF27AE60),
+                          ),
+                          decoration: InputDecoration(
+                            prefixText: '₹ ',
+                            prefixStyle: GoogleFonts.poppins(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF27AE60),
+                            ),
+                            hintText: '0',
+                            border: InputBorder.none,
+                            hintStyle: GoogleFonts.poppins(
+                              fontSize: 40,
+                              color: Colors.grey[300],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // 3. Payment Method
-            _buildSection(
-              'Payment Method',
-              Row(
-                children: _paymentMethods.map((method) {
-                  final isSelected = method == _selectedPaymentMethod;
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () => setState(() => _selectedPaymentMethod = method),
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFF51CF66) : Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(
-                          method,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: isSelected ? Colors.white : Colors.grey[600],
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Category',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3748),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // 4. Person
-            _buildSection(
-              'Person',
-              Row(
-                children: _persons.map((person) {
-                  final isSelected = person == _selectedPerson;
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () => setState(() => _selectedPerson = person),
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFF51CF66) : Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          person,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: isSelected ? Colors.white : Colors.grey[600],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // 5. Date Selection
-            _buildSection(
-              'Date',
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: const Color(0xFF1A1A1A),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      final date = await showDatePicker(
-                        context: context,
-                        initialDate: _selectedDate,
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime.now(),
-                      );
-                      if (date != null) {
-                        setState(() => _selectedDate = date);
-                      }
-                    },
-                    icon: const Icon(Icons.calendar_today, color: Color(0xFF51CF66)),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // 6. Note
-            _buildSection(
-              'Note',
-              TextField(
-                controller: _noteController,
-                focusNode: _noteFocusNode,
-                maxLines: 3,
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => FocusScope.of(context).unfocus(),
-                decoration: InputDecoration(
-                  hintText: 'Add a note about this income...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF51CF66), width: 2),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // 7. Upload Files
-            _buildSection(
-              'Upload Files',
-              Column(
-                children: [
-                  // Image Upload
-                  GestureDetector(
-                    onTap: _uploadImage,
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[400]!, width: 2),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey[50],
-                      ),
-                      child: _uploadedImage != null
-                          ? Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.file(
-                                    _uploadedImage!,
-                                    height: 100,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
+                        SizedBox(height: 16),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: _categories.map((category) {
+                            final isSelected = category['name'] == _selectedCategory;
+                            return GestureDetector(
+                              onTap: () => setState(() => _selectedCategory = category['name']),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? category['color'] : Color(0xFFF7FAFC),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Image uploaded',
-                                  style: GoogleFonts.inter(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      category['icon'],
+                                      size: 20,
+                                      color: isSelected ? Colors.white : Color(0xFF718096),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      category['name'],
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: isSelected ? Colors.white : Color(0xFF718096),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.camera_alt, color: Colors.grey),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Upload Image',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ],
-                            ),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Document Upload
-                  GestureDetector(
-                    onTap: _uploadDocument,
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[400]!, width: 2),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey[50],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            _uploadedDocument != null ? Icons.check_circle : Icons.description,
-                            color: _uploadedDocument != null ? Colors.green : Colors.grey,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              _uploadedDocument ?? 'Upload Document',
-                              style: GoogleFonts.inter(
-                                fontSize: 16,
-                                color: _uploadedDocument != null ? Colors.green : Colors.grey[600],
                               ),
-                              textAlign: TextAlign.center,
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Payment Method',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3748),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: _paymentMethods.map((method) {
+                            final isSelected = method == _selectedPaymentMethod;
+                            return Expanded(
+                              child: GestureDetector(
+                                onTap: () => setState(() => _selectedPaymentMethod = method),
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 8),
+                                  padding: EdgeInsets.symmetric(vertical: 14),
+                                  decoration: BoxDecoration(
+                                    color: isSelected ? Color(0xFF27AE60) : Color(0xFFF7FAFC),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    method,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: isSelected ? Colors.white : Color(0xFF718096),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Date',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3748),
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        GestureDetector(
+                          onTap: () async {
+                            final date = await showDatePicker(
+                              context: context,
+                              initialDate: _selectedDate,
+                              firstDate: DateTime(2020),
+                              lastDate: DateTime.now(),
+                            );
+                            if (date != null) {
+                              setState(() => _selectedDate = date);
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF7FAFC),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.calendar_today, color: Color(0xFF27AE60), size: 20),
+                                SizedBox(width: 12),
+                                Text(
+                                  '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF2D3748),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Note',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3748),
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        TextField(
+                          controller: _noteController,
+                          maxLines: 3,
+                          style: GoogleFonts.poppins(fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Add a note...',
+                            hintStyle: GoogleFonts.poppins(color: Color(0xFFA0AEC0)),
+                            filled: true,
+                            fillColor: Color(0xFFF7FAFC),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: _saveIncome,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF27AE60),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Text(
+                        'Add Income',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),
-
-            const SizedBox(height: 40),
-
-            // Save Button
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: _saveIncome,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF51CF66),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: Text(
-                  'Add Income',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSection(String title, Widget child) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF1A1A1A),
-            ),
-          ),
-          const SizedBox(height: 12),
-          child,
-        ],
       ),
     );
-  }
-
-  void _uploadImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _uploadedImage = File(image.path);
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Image uploaded successfully!')),
-      );
-    }
-  }
-
-  void _uploadDocument() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx', 'txt'],
-    );
-    
-    if (result != null) {
-      setState(() {
-        _uploadedDocument = result.files.single.name;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Document uploaded successfully!')),
-      );
-    }
-  }
-
-  void _uploadReceipt() {
-    // Legacy method - can be removed
   }
 
   void _saveIncome() {
     if (_amountController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter an amount')),
+        SnackBar(content: Text('Please enter an amount')),
       );
       return;
     }
-
-    // Save income logic here
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Income added successfully!')),
+      SnackBar(content: Text('Income added successfully!'), backgroundColor: Color(0xFF27AE60)),
     );
     Navigator.pop(context);
   }
@@ -480,8 +397,6 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
   void dispose() {
     _amountController.dispose();
     _noteController.dispose();
-    _amountFocusNode.dispose();
-    _noteFocusNode.dispose();
     super.dispose();
   }
 }
