@@ -90,9 +90,9 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
         ),
         body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
@@ -254,7 +254,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

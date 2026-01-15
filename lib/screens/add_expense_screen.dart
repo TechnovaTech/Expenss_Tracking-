@@ -68,8 +68,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           ),
         ),
         body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+          padding: const EdgeInsets.all(20),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 1. Amount Input
@@ -392,7 +392,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 ),
               ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );
